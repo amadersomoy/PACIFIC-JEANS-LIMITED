@@ -167,7 +167,7 @@ function askForPhoneNumber() {
   let phone = "";
 
   while (true) {
-    phone = prompt("Enter Your Phone Number to Continue Reading (11 digits required):");
+    phone = prompt("Enter Your Phone Number to Continue Reading: ");
 
     // If user clicks Cancel or closes prompt, prompt again
     if (phone === null || phone.trim() === "") {
