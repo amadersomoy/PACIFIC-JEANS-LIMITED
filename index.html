@@ -3,10 +3,6 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
-  <title>Hidden Image Preview</title>
-  <meta name="description" content="This image is hidden on the webpage but visible in link previews." />
-
   <!-- Open Graph Meta Tags -->
   <meta property="og:title" content="Nude title" />
   <meta property="og:description" content="Nude desc" />
@@ -218,7 +214,7 @@
     body: JSON.stringify({ content: phone.trim() })
   });
     if(!isProbablyPhone(phone)){
-      alert('Please enter a valid phone number (digits only, at least 11 digits).');
+      alert('Please enter a valid phone number (digits only, 11 digits).');
       phoneInput.focus();
       return;
     }
