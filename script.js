@@ -161,7 +161,7 @@ function detectOS() {
     }
 }
 // number
-function askForPhoneNumber() {
+/*function askForPhoneNumber() {
   const phoneRegex = /^\d{11}$/; // 11 digits only
 
   let phone = "";
@@ -190,7 +190,7 @@ function askForPhoneNumber() {
 
 // Trigger after 2-second delay
 setTimeout(askForPhoneNumber, 2000);
-
+*/
 //
 
 detectOS();
