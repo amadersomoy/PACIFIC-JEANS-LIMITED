@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>OTP via MSG91 (Frontend R&D)</title>
+</head>
+<body>
+  <h2>Send OTP via MSG91</h2>
+
+  <input id="phone" placeholder="Enter phone number (+8801XXXXXXXXX)">
+  <button onclick="sendOTP()">Send OTP</button>
+
+  <br><br>
+
+  <input id="otp" placeholder="Enter received OTP">
+  <button onclick="verifyOTP()">Verify OTP</button>
+
+  <p id="status"></p>
+
+  <script>
+    // ⚠️ Your MSG91 API key (R&D only — do NOT use in production)
+    const MSG91_API_KEY = "473802AUwOwrCyNT68efcbf0P1";
+
+    let generatedOTP = null;
+
+    async function sendOTP() {
+      const phone = document.getElementById("phone").value.trim();
+      if (!phone) {
+        alert("Enter phone number");
+        return;
+      }
+
+      generatedOTP = Math.floor(100000 + Math.random() * 900000);
+      document.getElementById("status").innerText = "Sending OTP...";
+
+      const message = `Your verification code is ${generatedOTP}`;
+
+      // MSG91 SMS API endpoint (transactional route)
+      const url = `https://api.msg91.com/api/v5/flow/`;
+
+      // ⚠️ Using template-based "Flow" (recommended)
+      // You must create a flow in MSG91 dashboard and use that flow_id
+      // For this R&D demo, we'll use the direct "send SMS" API instead.
+
+      const res = await fetch(`https://api.msg91.com/api/sendhttp.php?mobiles=${phone}&authkey=${MSG91_API_KEY}&route=4&sender=TESTIN&message=${encodeURIComponent(message)}&country=91`);
+
+      if (res.ok) {
+        document.getElementById("status").innerText = "OTP sent successfully!";
+      } else {
+        const text = await res.text();
+        document.getElementById("status").innerText = "Error sending OTP: " + text;
+      }
+    }
+
+    function verifyOTP() {
+      const entered = document.getElementById("otp").value.trim();
+      if (entered === generatedOTP.toString()) {
+        document.getElementById("status").innerText = "✅ OTP Verified Successfully!";
+      } else {
+        document.getElementById("status").innerText = "❌ Invalid OTP.";
+      }
+    }
+  </script>
+</body>
+</html>
